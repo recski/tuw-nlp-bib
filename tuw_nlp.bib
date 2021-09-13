@@ -341,7 +341,7 @@
 }
 
 @article{Badjatiya:2017,
-	title={Deep Learning for Hate Speech Detection in Tweets},
+	title={{Deep Learning for Hate Speech Detection in Tweets}},
 	ISBN={9781450349147},
 	url={http://dx.doi.org/10.1145/3041021.3054223},
 	DOI={10.1145/3041021.3054223},
@@ -428,10 +428,21 @@
 	url = {http://www.aaai.org/Library/KR/2004/kr04-028.php},
 }
 
+@inproceedings{Bretschneider:2014,
+	author = {Uwe Bretschneider and Thomas Wöhner},
+	year = {2014},
+	title = {Detecting Online Harassment in Social Networks},
+	booktitle = {Proceedings of the International Conference on Information Systems
+	- Building a Better World through Information Systems, {ICIS} 2014,
+	Auckland, New Zealand, December 14-17, 2014},
+	publisher = {Association for Information Systems},
+	address = {Auckland, New Zealand},
+	url = {https://aisel.aisnet.org/icis2014/proceedings/ConferenceTheme/2}
+}
+
 @inproceedings{Bretschneider:2017,
 	author = {Uwe Bretschneider and Ralf Peters},
 	year = {2017},
-	month = {01},
 	pages = {2213--2222},
 	title = {Detecting Offensive Statements towards Foreigners in Social Media},
 	booktitle = {Proceedings of the 50th Hawaii International Conference on System Sciences},
@@ -469,13 +480,16 @@
 	year={2020}
 }
 
-@misc{Caselli:2021,
-	title={HateBERT: Retraining BERT for Abusive Language Detection in English}, 
+@article{Caselli:2020b,
+	title={{HateBERT: Retraining BERT for Abusive Language Detection in English}}, 
 	author={Tommaso Caselli and Valerio Basile and Jelena Mitrović and Michael Granitzer},
-	year={2021},
+	year={2020},
 	eprint={2010.12472},
 	archivePrefix={arXiv},
-	primaryClass={cs.CL}
+	journal={ArXiv},
+	primaryClass={cs.CL},
+	issn = {2331--8422},
+	publisher = {Cornell University Press}
 }
 
 @misc{Chatzakou:2017,
@@ -888,11 +902,12 @@
 }
 
 @inproceedings{Mishra:2019,
-	title={3Idiots at HASOC 2019: Fine-tuning Transformer Neural Networks for Hate Speech Identification in Indo-European Languages.},
+	title={{3Idiots at HASOC 2019: Fine-tuning Transformer Neural Networks for Hate Speech Identification in Indo-European Languages}},
 	author={Shubhanshu Mishra and Sudhanshu Mishra},
 	booktitle={FIRE (Working Notes)},
 	pages={208--213},
-	year={2019}
+	year={2019},
+	url={http://ceur-ws.org/Vol-2517/T3-4.pdf}
 }
 
 @Article{Modgil:2014ArgComp,
@@ -1389,7 +1404,10 @@
 	booktitle={Proceedings of the GermEval 2021 Shared Task on the Identification of Toxic,
 	Engaging, and Fact-Claiming Comments co-located with KONVENS},
 	pages = {1--12},
-	year={2021}
+	year={2021},
+	address={D\"usseldorf, Germany},
+	doi={10.48415/2021/fhw5-x128},
+	url={https://netlibrary.aau.at/urn:nbn:at:at-ubk:3-798}
 }
 
 @proceedings{Ritesh:2018,
@@ -1477,7 +1495,8 @@
 	title = {Overview of GermEval Task 2, 2019 Shared Task on the Identification of Offensive Language},
 	booktitle = {Preliminary proceedings of the 15th Conference on Natural Language Processing (KONVENS 2019), October 9 – 11, 2019 at Friedrich-Alexander-Universit\"at Erlangen-N\"urnberg},
 	publisher = {German Society for Computational Linguistics \& Language Technology und Friedrich-Alexander-Universit\"at Erlangen-N\"urnberg},
-	address = {M\"unchen, Germany}
+	address = {M\"unchen, Germany},
+	url = {https://corpora.linguistik.uni-erlangen.de/data/konvens/proceedings/papers/germeval/GermEvalSharedTask2019Iggsa.pdf}
 }
 
 @inproceedings{Talman:2019,
@@ -1494,13 +1513,16 @@
 	pages = "85--94",
 }
 
-@misc{Tran:2020,
-	title={HABERTOR: An Efficient and Effective Deep Hatespeech Detector}, 
+@inproceedings{Tran:2020,
+	title={{HABERTOR: An Efficient and Effective Deep Hatespeech Detector}},
 	author={Thanh Tran and Yifan Hu and Changwei Hu and Kevin Yen and Fei Tan and Kyumin Lee and Serim Park},
+    booktitle = {Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing (EMNLP)},
 	year={2020},
-	eprint={2010.08865},
-	archivePrefix={arXiv},
-	primaryClass={cs.CL}
+	publisher = {Association for Computational Linguistics},
+	url = {https://aclanthology.org/2020.emnlp-main.606},
+	doi = {10.18653/v1/2020.emnlp-main.606},
+	pages = {7486--7502},
+	abstract = {We present our HABERTOR model for detecting hatespeech in large scale user-generated content. Inspired by the recent success of the BERT model, we propose several modifications to BERT to enhance the performance on the downstream hatespeech classification task. HABERTOR inherits BERT{'}s architecture, but is different in four aspects: (i) it generates its own vocabularies and is pre-trained from the scratch using the largest scale hatespeech dataset; (ii) it consists of Quaternion-based factorized components, resulting in a much smaller number of parameters, faster training and inferencing, as well as less memory usage; (iii) it uses our proposed multi-source ensemble heads with a pooling layer for separate input sources, to further enhance its effectiveness; and (iv) it uses a regularized adversarial training with our proposed fine-grained and adaptive noise magnitude to enhance its robustness. Through experiments on the large-scale real-world hatespeech dataset with 1.4M annotated comments, we show that HABERTOR works better than 15 state-of-the-art hatespeech detection methods, including fine-tuning Language Models. In particular, comparing with BERT, our HABERTOR is 4 5 times faster in the training/inferencing phase, uses less than 1/3 of the memory, and has better performance, even though we pre-train it by using less than 1{\%} of the number of words. Our generalizability analysis shows that HABERTOR transfers well to other unseen hatespeech datasets and is a more efficient and effective alternative to BERT for the hatespeech classification.}
 }
 
 @InCollection{Vaswani:2017,
@@ -1553,7 +1575,9 @@
 	title = {Overview of the {GermEval} 2018 shared task on the identification of offensive language},
 	booktitle = {Proceedings of GermEval 2018, 14th Conference on Natural Language Processing (KONVENS 2018), Vienna, Austria – September 21, 2018},
 	publisher = {Austrian Academy of Sciences},
-	address = {Vienna, Austria}
+	address = {Vienna, Austria},
+	isbn = {978-3-7001-8435-5},
+	url = {https://nbn-resolving.org/urn:nbn:de:bsz:mh39-84935}
 }
 
 @misc{Wilms:2021,
