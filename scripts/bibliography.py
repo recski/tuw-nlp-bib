@@ -69,9 +69,10 @@ def find_citations(tex_file):
 def read_entries(bib_file):
     with open(bib_file) as bib:
         bib_string = bib.read()
-        entries = re.findall(r'(@.*{[^@]*})', bib_string)
+        entries = re.split(r'\n@', bib_string)
         bib_entries = []
         for entry in entries:
+            entry = f'@{entry}' if not entry.startswith('@') else entry
             bib_entries.append(BibEntry(entry))
     return bib_entries
 
@@ -95,7 +96,7 @@ def main(args):
     if os.path.exists(args.out):
         out_bib = read_entries(args.out)
         citations = list(set(citations).union(set(out_bib)))
-    elif not os.path.exists(os.path.dirname(args.out)):
+    elif not os.path.exists(os.path.dirname(args.out)) and os.path.dirname(args.out) != '':
         os.makedirs(os.path.dirname(args.out), exist_ok=True)
     with open(args.out, mode) as output:
         citations.sort()
