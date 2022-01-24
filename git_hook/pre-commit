@@ -1,0 +1,17 @@
+#!/bin/sh
+
+python3 scripts/check_format.py --bib tuw_nlp.bib
+wait $!
+
+if grep -q "WARNING" check_log.txt
+then
+	echo "Warning: Check for warnings in check_log.txt"
+fi
+
+if grep -q "ERROR" check_log.txt
+then
+	cat <<\EOF
+Error: There are errors in the tuw_nlp.bib file. Check for errors in the check_log.txt
+EOF
+	exit 1
+fi

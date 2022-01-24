@@ -16,36 +16,112 @@ class BibEntry:
             self.id = re.findall(r'{(.*)', text)[0].strip()
         self.text = text
 
+        self.title = None
+        self.title_text = None
+        self.authors = []
+        self.authors_ascii = []
+        self.author_text = None
+        self.year_text = None
+        self.year = None
+        self.find_title()
+        self.find_author()
+        self.find_year()
+
+    def find_closing(self):
+        opened = 0
+        for i, c in enumerate(self.title_text):
+            if c == '{':
+                opened += 1
+            elif c == '}' and opened != 0:
+                opened -= 1
+            elif c == '}' and opened == 0:
+                self.title_text = self.title_text[:i]
+                break
+
+    def find_title(self):
+        self.title_text = re.findall(
+            r'^\s*(title|TITLE|Title)\s*.*\s*=\s*'
+            r'["{]'
+            r'([\{\}\(\)\[\]<>\s\w,.?!:;_/\\\'’=+^%~$—–\-@0-9{\"o}{\"a}{\"u}“”`´‘ü]*)'
+            r'[}"]',
+            self.text, re.MULTILINE)
+        if len(self.title_text) > 0:
+            self.title_text = self.title_text[0][1]
+            self.find_closing()
+            self._clean_title()
+
+    def find_author(self):
+        self.author_text = re.findall(
+            r'^\s*(author|AUTHOR|Author)\s*=\s*'
+            r'["{]'
+            r'([\{\}\s\w,/\\\'^.\-~&`´‘’${\\i}{\"o}{\"a}{\"u}ü]*)'
+            r'[}"]',
+            self.text, re.MULTILINE)
+        if len(self.author_text) > 0:
+            self.author_text = self.author_text[0][1]
+            self._clean_author()
+
+    def find_year(self):
+        self.year_text = re.findall(r'^\s*(year|YEAR|Year)\s*=\s*["{]*[A-Za-z\s]*([0-9]+)[}"]*', self.text, re.MULTILINE)
+        if len(self.year_text) > 0:
+            self.year = self.year_text[0][1]
+
+    def _clean_author(self):
+        if self.author_text is not None:
+            self.authors = re.split(r'\sand\s|\sAND|\\&\s', self.author_text)
+            self.authors = [" ".join(reversed(author.strip().split(','))).strip() for author in self.authors]
+            replace_dict = {'\\\'': '', '\\\"': '', '\\v': '', '\\H': '', '\\': '', '{': '', '}': '', '\'': '', '^': '',
+                            'á': 'a', 'ä': 'a', 'ǎ': 'a',
+                            'é': 'e',
+                            'í': 'i',
+                            'ó': 'o', 'ö': 'o', 'ő': 'o', 'ø': 'o', 'ò': 'o',
+                            'ú': 'u', 'ü': 'u', 'ű': 'u',
+                            'ß': 'ss',
+                            'ğ': 'g',
+                            'ć': 'c', 'ç': 'c',
+                            'š': 's', 'ş': 's',
+                            'ř': 'r',
+                            'ý': 'y',
+                            'ž': 'z'}
+            for author in self.authors:
+                author_ascii = author.lower()
+                for character, replacement in replace_dict.items():
+                    author_ascii = author_ascii.replace(character, replacement)
+                self.authors_ascii.append(author_ascii)
+
+    def _clean_title(self):
+        if self.title_text is not None:
+            self.title = self.title_text.replace('{', '').replace('}', '').replace('\n', '').replace('\t', '')
+
+    def bib_similarity(self, other):
+        if (self.title is not None and other.title is not None and self.title.lower() == other.title.lower()) \
+                and set(self.authors) == set(other.authors):
+            return True
+        return False
+
     def __eq__(self, other):
         return self.id == other
-    
+
     def __lt__(self, other):
         if self.needed:
             return True
         if other.needed:
             return False
         return self.id < other.id
-    
+
     def __le__(self, other):
         if self.needed:
             return True
         if other.needed:
             return False
         return self.id <= other.id
-    
+
     def __gt__(self, other):
         if self.needed:
             return False
         if other.needed:
             return True
         return self.id > other.id
-    
-    def __le__(self, other):
-        if self.needed:
-            return False
-        if other.needed:
-            return True
-        return self.id >= other.id
 
     def __hash__(self):
         return hash(self.id)
@@ -116,7 +192,7 @@ if __name__ == '__main__':
     if args.tex is None or len(args.tex) < 1:
         raise Exception('No tex files given. At least one tex file is needed to add the citations from it.')
     if args.bib is None:
-        raise Exception('No original bibliograpy file given to find the citations in.')
+        raise Exception('No original bibliography file given to find the citations in.')
     if args.out is None:
         args.out = 'mybib.bib'
     main(args)
