@@ -130,11 +130,15 @@ class BibEntry:
         return self.text
 
 
-def find_citations(tex_file):
+def find_citations(tex_file, is_latex=True):
     citations = set()
     with open(tex_file) as tex:
         tex_string = tex.read()
-        cites = re.findall(r'\\cite[tp]?{([^}]*)}', tex_string)
+        if is_latex:
+            # If cite is in newcommand, it will think it's a citation, but won't find it in the bibs.
+            cites = re.findall(r'\\cite[^{}]*{([^}]*)}', tex_string)
+        else:
+            cites = re.findall(r'\\citation{([^}]*)}', tex_string)
         for cite in cites:
             individual_cites = cite.split(',')
             for individual_cite in individual_cites:
@@ -165,9 +169,16 @@ def find_entries(bib_entries, citation_set):
 
 
 def main(args):
-    cit = find_citations(args.tex[0])
-    bib = read_entries(args.bib)
-    citations = find_entries(bib, cit)
+    cits = set()
+    bibs = []
+    for tex in args.tex:
+        cits = cits.union(find_citations(tex, is_latex=True))
+    for aux in args.aux:
+        cits = cits.union(find_citations(aux, is_latex=False))
+    for bib in args.bib:
+        bibs += read_entries(bib)
+    bibs = list(set(bibs))
+    citations = find_entries(bibs, cits)
     mode = 'w'
     if os.path.exists(args.out):
         out_bib = read_entries(args.out)
@@ -184,15 +195,17 @@ if __name__ == '__main__':
     arg_parser = ArgumentParser()
     arg_parser.add_argument('-t', '--tex', nargs='+', help='List the latex files you want '
                                                            'to gather the citations from')
-    arg_parser.add_argument('-b', '--bib', help='The bib files to check for the citations')
+    arg_parser.add_argument('-a', '--aux', nargs='+', help='List the aux files you want '
+                                                           'to gather the citations from')
+    arg_parser.add_argument('-b', '--bib', nargs='+', help='The bib files to check for the citations')
     arg_parser.add_argument('-o', '--out', help='The output bib file. '
                                                 'The bib file can be non-empty and it will be '
                                                 'checked for existing citations.')
     args = arg_parser.parse_args()
-    if args.tex is None or len(args.tex) < 1:
-        raise Exception('No tex files given. At least one tex file is needed to add the citations from it.')
-    if args.bib is None:
-        raise Exception('No original bibliography file given to find the citations in.')
+    if args.tex is None or len(args.tex) < 1 or args.aux is None or len(args.aux) < 1:
+        raise Exception('No tex or aux files given. At least one tex file is needed to add the citations from it.')
+    if args.bib is None or len(args.bib) < 1:
+        raise Exception('No original bibliography files given to find the citations in.')
     if args.out is None:
         args.out = 'mybib.bib'
     main(args)
