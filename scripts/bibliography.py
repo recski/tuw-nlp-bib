@@ -134,7 +134,7 @@ def find_citations(tex_file):
     citations = set()
     with open(tex_file) as tex:
         tex_string = tex.read()
-        cites = re.findall(r'\\cite{([^}]*)}', tex_string)
+        cites = re.findall(r'\\cite[tp]?{([^}]*)}', tex_string)
         for cite in cites:
             individual_cites = cite.split(',')
             for individual_cite in individual_cites:
