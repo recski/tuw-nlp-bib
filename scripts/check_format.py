@@ -29,7 +29,8 @@ def check_unique(entry, other_entry):
     if entry == other_entry:
         logging.error(f"Duplication of bib ids: {entry.id}: {entry.title} by {', '.join(entry.authors)},"
                       f"and {other_entry.id}: {other_entry.title} by {', '.join(other_entry.authors)}")
-    elif entry.bib_similarity(other_entry):
+    elif entry.bib_similarity(other_entry) and not (entry.id.endswith(":lr") and entry.id[:-3] == other_entry.id or
+                                                    other_entry.id.endswith(":lr") and other_entry.id[:-3] == entry.id):
         logging.warning(f"Possible duplication of bib entries: {entry.id}, {other_entry.id}")
 
 
