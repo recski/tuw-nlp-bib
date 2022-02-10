@@ -27,8 +27,8 @@ def check_id_format(bib_entry):
 
 def check_unique(entry, other_entry):
     if entry == other_entry:
-        logging.error(f"Duplication of bib ids: {entry.id}: {entry.title} by {', '.join(entry.authours)},"
-                      f"and {other_entry.id}: {other_entry.title} by {', '.join(other_entry.authours)}")
+        logging.error(f"Duplication of bib ids: {entry.id}: {entry.title} by {', '.join(entry.authors)},"
+                      f"and {other_entry.id}: {other_entry.title} by {', '.join(other_entry.authors)}")
     elif entry.bib_similarity(other_entry):
         logging.warning(f"Possible duplication of bib entries: {entry.id}, {other_entry.id}")
 
